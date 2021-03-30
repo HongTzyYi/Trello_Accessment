@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace WordSplit
 {
@@ -7,7 +10,7 @@ namespace WordSplit
         static void Main(string[] args)
         {
             Program program = new Program();
-            string[] testArray = { "catzzz", "apple,bat,cat,goodbye,hell,heLlo,yellow,why,,zee,zzz" };
+            string[] testArray = { "cat", "apple,bat,cat,goodbye,hell,heLlo,yellow,why,,zee,zzz" };
 
             Array.ForEach<string>(testArray, Console.WriteLine);
             Console.WriteLine(program.WordSplit(testArray));
@@ -27,27 +30,48 @@ namespace WordSplit
             string result = string.Empty;
 
             string WordToSplit = strArr[0];
-            string[] ToCheck = strArr[1].Split(',');
-            for (int i = 0; i < ToCheck.Length; i++)
+
+
+            //Method 1: Double for loop, check by adding two matching words
+            //string[] ToCheck = strArr[1].Split(',');
+            //for (int i = 0; i < ToCheck.Length; i++)
+            //{
+            //    if (!string.IsNullOrEmpty(ToCheck[i]))
+            //    {
+            //        if (WordToSplit.ToLower().Contains(ToCheck[i].ToLower()))
+            //        {
+            //            //Check if another word also contain within the remaining letters
+            //            for (int o = 0; o < ToCheck.Length; o++)
+            //            {
+            //                if (!string.IsNullOrEmpty(ToCheck[o]) && (ToCheck[i] + ToCheck[o]).ToLower() == WordToSplit.ToLower())
+            //                {
+            //                    result += ToCheck[i] + "," + ToCheck[o];
+            //                    return result; //Located the 2 words within WordToSplit. End the checking loop and return result
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //return "Unable to split into 2 words from given list";
+
+            //Method 2: one for loop only, done by obtaining the list of remaining letters from first match, then intersect the list with the provided list of words
+            List<string> ToCheck = new List<string>(strArr[1].ToLower().Split(","));
+            List<string> ToCheck2 = new List<string>();
+            for(int i=0; i < ToCheck.Count; i++)
             {
                 if (!string.IsNullOrEmpty(ToCheck[i]))
                 {
-                    if (WordToSplit.ToLower().Contains(ToCheck[i].ToLower()))
+                    if (WordToSplit.ToLower().Contains(ToCheck[i]))
                     {
-                        //Check if another word also contain within the remaining letters
-                        for (int o = 0; o < ToCheck.Length; o++)
-                        {
-                            if (!string.IsNullOrEmpty(ToCheck[o]) && (ToCheck[i] + ToCheck[o]).ToLower() == WordToSplit.ToLower())
-                            {
-                                result += ToCheck[i] + "," + ToCheck[o];
-                                return result; //Located the 2 words within WordToSplit. End the checking loop and return result
-                            }
-                        }
+                        Regex rex = new Regex(ToCheck[i], RegexOptions.IgnoreCase);
+                        ToCheck2.Add(rex.Replace(WordToSplit, "", 1));
                     }
                 }
             }
+            var matchedvalue = ToCheck.Intersect(ToCheck2);
+            result = string.Join(",", matchedvalue);
 
-            return "Unable to split into 2 words from given list";
+            return result;
         }
     }
 }
