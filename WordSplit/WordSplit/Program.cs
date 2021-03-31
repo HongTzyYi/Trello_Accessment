@@ -27,6 +27,8 @@ namespace WordSplit
         {
             string WordToSplit = strArr[0];
             string[] ToCheck = strArr[1].ToLower().Split(",");
+            //any other input check goes here...
+
             //List<string> ToCheck2 = new List<string>();
             //for(int i=0; i < ToCheck.Length; i++)
             //{
@@ -50,24 +52,21 @@ namespace WordSplit
         /// <returns></returns>
         public string IsWord(string BaseWord, string[] ReferenceWords, int SplitFromLetterCount = 0)
         {
-            string result = "Unable to split \"" + BaseWord + "\" from provided reference words list!";
-            
-            while(SplitFromLetterCount < BaseWord.Length)
+            if(SplitFromLetterCount < BaseWord.Length)
             {
                 SplitFromLetterCount++;
                 string SplittedWord = BaseWord.Substring(0, SplitFromLetterCount);
                 string SplittedWord2 = BaseWord.Substring(SplitFromLetterCount);
                 if (ReferenceWords.Contains(SplittedWord) && ReferenceWords.Contains(SplittedWord2))
                 {
-                    result = SplittedWord + "," + SplittedWord2;
-                    break;
-                }
-                else
-                {
-                    IsWord(BaseWord, ReferenceWords, SplitFromLetterCount);
+                    return SplittedWord + "," + SplittedWord2;
                 }
             }
-            return result;
+            else
+            {
+                return "Not possible to split \"" + BaseWord + "\" from the given word list!";
+            }
+            return IsWord(BaseWord, ReferenceWords, SplitFromLetterCount);
         }
     }
 }
