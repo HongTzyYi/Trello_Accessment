@@ -9,7 +9,8 @@
 
 /*Logic Crafting:
  *Assumption: 
- *-For string to repeat itself, the max length for that string will always be 1/2 of given string length
+ *-For string to repeat itself, the max length for that pattern will always be 1/2 of given string length
+ *-Based on problem description, the pattern should be able to fully formed the input string by itself
  *
  *Using Recursion approach:
  *-the starting string to check for would be substring of 1/2 length from given input
@@ -28,7 +29,7 @@ namespace StringPeriods
         static void Main(string[] args)
         {
             Program program = new Program();
-            string testInput = "abababababab";
+            string testInput = "ababababababa";
             Console.WriteLine("Base string: " + testInput);
             Console.WriteLine(program.StringPeriod(testInput));
         }
@@ -43,7 +44,23 @@ namespace StringPeriods
             {
                 return "-1";
             }
-            return StringPeriod(input, input.Substring(0, input.Length / 2));
+
+            /*Apporach 2:
+             * -Get substring of 1/2 length of input
+             * -Attempt to replace the pattern to determine whether it can be fully replaced
+             * -Since this logic check from max length pattern first, thus the moment any pattern able to fully replace input string 
+             * will be the longest pattern present in input
+             */
+            for (int i = 0; i < input.Length/2; i++)
+            {
+                string Pattern = input.Substring(0, (input.Length / 2) - i);
+                if (string.IsNullOrEmpty(input.Replace(Pattern, "")))
+                {
+                    return "Longest repeating pattern: " + Pattern;
+                }
+            }
+            return "No repeating pattern in this string!";
+            //return StringPeriod(input, input.Substring(0, input.Length / 2));
         }
         /// <summary>
         /// Overloaded function to check for longest repeating pattern recursively
