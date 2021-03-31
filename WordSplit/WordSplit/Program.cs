@@ -9,7 +9,7 @@ namespace WordSplit
         static void Main(string[] args)
         {
             Program program = new Program();
-            string[] testArray = { "hellozzz", "apple,bat,cat,goodbye,hell,heLlo,yellow,why,zee,zzz" };
+            string[] testArray = { "hello", "apple,bat,cat,goodbye,hell,heLlo,yellow,why,,zee,zzz" };
 
             Array.ForEach<string>(testArray, Console.WriteLine);
             Console.WriteLine(program.WordSplit(testArray));
@@ -42,7 +42,19 @@ namespace WordSplit
             //return string.Join(",", matchedvalue);
 
             //Split using recursive method
-            return IsWord(WordToSplit, ToCheck);
+            //return IsWord(WordToSplit, ToCheck);
+
+            //Reimplement recursive logic to for loop
+            for(int i=1; i < WordToSplit.Length; i++)
+            {
+                string SplittedWord = WordToSplit.Substring(0, i);
+                string SplittedWord2 = WordToSplit.Substring(i);
+                if (ToCheck.Contains(SplittedWord) && ToCheck.Contains(SplittedWord2))
+                {
+                    return SplittedWord + "," + SplittedWord2;
+                }
+            }
+            return "Not possible to split \"" + WordToSplit + "\" from the given word list!";
         }
         /// <summary>
         /// Recursive function to identify one word from BaseWord using ReferenceWords list, split and return it into two words
