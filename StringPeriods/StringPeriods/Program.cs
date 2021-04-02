@@ -7,18 +7,6 @@
  *it is the longest substring. If the input string contains only a single character, your program should return the string -1. 
  */
 
-/*Logic Crafting:
- *Assumption: 
- *-For string to repeat itself, the max length for that pattern will always be 1/2 of given string length
- *-Based on problem description, the pattern should be able to fully formed the input string by itself
- *
- *Using Recursion approach:
- *-the starting string to check for would be substring of 1/2 length from given input
- *-check whether the string is being repeated in the given input
- *-If the string repeated more than once, end checking and return result
- *-else call the function again, this time with the checking sting length -1 from previous checking
- */
-
 using System;
 using System.Linq;
 
@@ -29,15 +17,10 @@ namespace StringPeriods
         static void Main(string[] args)
         {
             Program program = new Program();
-            string testInput = "ababababababa";
+            string testInput = "abcabcabc";
             Console.WriteLine("Base string: " + testInput);
             Console.WriteLine(program.StringPeriod(testInput));
         }
-        /// <summary>
-        /// Base function to handle input checking and find longest repeating pattern in input
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
         public string StringPeriod(string input)
         {
             if(input.Length <= 1)
@@ -45,12 +28,6 @@ namespace StringPeriods
                 return "-1";
             }
 
-            /*Apporach 2:
-             * -Get substring of 1/2 length of input
-             * -Attempt to replace the pattern to determine whether it can be fully replaced
-             * -Since this logic check from max length pattern first, thus the moment any pattern able to fully replace input string 
-             * will be the longest pattern present in input
-             */
             for (int i = 0; i < input.Length/2; i++)
             {
                 string Pattern = input.Substring(0, (input.Length / 2) - i);
@@ -60,29 +37,6 @@ namespace StringPeriods
                 }
             }
             return "No repeating pattern in this string!";
-            //return StringPeriod(input, input.Substring(0, input.Length / 2));
-        }
-        /// <summary>
-        /// Overloaded function to check for longest repeating pattern recursively
-        /// </summary>
-        /// <param name="BaseInput"></param>
-        /// <param name="TestInput"></param>
-        /// <returns></returns>
-        public string StringPeriod(string BaseInput, string TestInput = "")
-        {
-            //Count occurence of repeated pattern here
-            string[] ToCheck = BaseInput.Split(TestInput);
-            if(ToCheck.Length > 2 && ToCheck.All(i => i == ""))
-            {
-                return "Longest repeating pattern: " + TestInput;
-            }
-            
-            if(TestInput.Length <= 1)
-            {
-                return "No repeating pattern in this string!";
-            }
-
-            return StringPeriod(BaseInput, TestInput.Substring(0, TestInput.Length-1));
         }
     }
 }
